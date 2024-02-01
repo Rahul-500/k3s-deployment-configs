@@ -1,51 +1,67 @@
-# On-Prime K3s Cluster on Bare Metal Raspberry Pi with Grafana Prometheus Monitoring
+# On-Prime k3s Cluster on Bare Metal Raspberry Pi with Grafana Prometheus Monitoring
 
-- **Description:** Short description of the project goes here (not more than 3 lines).
-- **Requirements:** List any prerequisites or hardware/software requirements for the project.
+- **Description:** A guide for setting up a k3s cluster on Raspberry Pi with Grafana Prometheus monitoring.
+
+- **Requirements:**
+  - Raspberry Pi (Bare Metal)
+  - Ansible
+  - Docker
+  - k3s
+  - Grafana
+  - Prometheus
 
 ## Bake the PI
 
-- **Steps:**
-  - Step 1: 
-  - Step 2:
-  - ...
+### Steps:
+- [Add your steps here]
 
-## Setting Up Our K3s Cluster
+## Automating k3s setup: Incoming.... Ansible
 
-- **Description:** Provide an overview of the K3s cluster setup.
-- **Setup:**
-  - Step 1: 
-  - Step 2:
-  - ...
-- **Commands Used:**
-  - `command1`: Description of what this command does.
-  - `command2`: Description of what this command does.
-  - ...
-- **Check for Working:** Instructions to verify that the K3s cluster is functioning correctly.
+- **Description:** Introduction to automating k3s setup using Ansible.
+
+### Set Up
+- **On Local Machine:**
+  - Commands and description of each command.
+  
+- **On k3s Setup:**
+  - Commands and description of each command.
+
+### Check for Working
+- [Add your steps for checking the setup here]
+
+## Setting up our k3s Cluster
+
+- **Description:** Details about setting up the k3s cluster manually.
+
+### Set Up
+- Commands and description of each command.
+
+### Check for Working
+- [Add your steps for checking the setup here]
 
 ## Application
 
-- **About Docker:** Brief explanation of Docker and its relevance to the application.
-- **Why Use Docker as an Application:** Reasons for choosing Docker.
-- **Setting Up Docker on K3s (New Version for Debian):**
-  - Step 1: 
-  - Step 2:
-  - ...
-- **Application Structure:** Provide an overview of the application's structure.
+- **About Docker:** Explanation of Docker and its relevance.
 
-## Prometheus and Grafana (Monitoring [Sus])
+- **Why Use Docker as an Application:**
+  - [Add your reasons here]
 
-- **Description:** Explain the role of Prometheus and Grafana in monitoring.
-- **Setup:**
-  - Step 1: 
-  - Step 2:
-  - ...
-- **Commands Used:**
-  - `command1`: Description of what this command does.
-  - `command2`: Description of what this command does.
-  - ...
-- **Check for Working:** Instructions to verify that Prometheus and Grafana are working as expected.
+- **Setting up Docker on k3s (New Version for Debian):**
+  - Commands and description of each command.
+
+- **Application Structure:**
+  - [Describe the structure of your application]
+
+## Prometheus and Grafana (Monitoring)
+
+- **Description:** Overview of Prometheus and Grafana for monitoring.
+
+### Set Up
+- Commands and description of each command.
+
+### Check for Working
+- [Add your steps for checking the monitoring setup here]
 
 ## Check for Overall Working of the System
 
-- Provide steps or commands to check the overall functioning of the system.
+- [Add your steps for checking the overall system functionality]
