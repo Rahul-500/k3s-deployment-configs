@@ -1,14 +1,23 @@
 # On-Prime k3s Cluster on Bare Metal Raspberry Pi with Grafana Prometheus Monitoring
 
-- **Description:** A guide for setting up a k3s cluster on Raspberry Pi with Grafana Prometheus monitoring.
+Leveraging Raspberry Pi devices, we established a budget-friendly Kubernetes cluster using k3s, a lightweight version designed for edge computing and IoT. This approach allowed us to maximize our existing hardware without the need for additional infrastructure costs.
+## Hardware Setup:
 
-- **Requirements:**
-  - Raspberry Pi (Bare Metal)
-  - Ansible
-  - Docker
-  - k3s
-  - Grafana
-  - Prometheus
+### 1. Raspberry Pi Devices:
+   - 4 Raspberry Pi 4s
+     - Source Node: 8GB configuration
+     - 2 Data Nodes: 4GB configuration each
+     - Plain Node for Prometheus and Grafana Monitoring: 2GB configuration
+
+### 2. Storage:
+   - 4 Samsung 32GB MicroSD cards for Raspberry Pi storage
+
+### 3. Power and Connectivity:
+   - 4 Raspberry Pi Power over Ethernet (PoE) HAT
+   - Connect Raspberry Pi devices to the router using Ethernet cables.
+
+### 4. Networking Equipment:
+   - Utilize a __NETGEAR GS310TP 8 Port POE Switch__ for efficient power and data distribution through the Ethernet cabling. This simplifies the setup and allows for simultaneous powering of multiple devices.
 
 ## Bake the PI
 
