@@ -17,12 +17,40 @@ Leveraging Raspberry Pi devices, we established a budget-friendly Kubernetes clu
    - Connect Raspberry Pi devices to the router using Ethernet cables.
 
 ### 4. Networking Equipment:
-   - Utilize a __NETGEAR GS310TP 8 Port POE Switch__ for efficient power and data distribution through the Ethernet cabling. This simplifies the setup and allows for simultaneous powering of multiple devices.
+   - Utilize a __NETGEAR POE Switch__ for efficient power and data distribution through the Ethernet cabling. This simplifies the setup and allows for simultaneous powering of multiple devices.
 
-## Bake the PI
+## Bake the Pi
+
+To use Raspberry Pis as cluster nodes, set them up headless—without a monitor, keyboard, or mouse. We'll configure them remotely using SSH, eliminating the need for a GUI.
 
 ### Steps:
-- [Add your steps here]
+   1. Download and install the Raspberry Pi Imager on your computer.
+      ```bash
+      sudp apt install rpi-imager
+      ```
+   2. Open the Raspberry Pi Imager and select the “**CHOOSE OS**” option.
+      ![Screenshot from 2024-02-04 10-48-25](https://github.com/infraspecdev/k3s-deployment-configs/assets/156162308/2b10f6b5-6a69-43a7-a12f-67648e98f1a0)
+
+   3. From the list of available operating systems, select “**Raspberry Pi OS (other)**”, and then choose “_Raspberry Pi OS Lite (64-bit)_”
+      ![Screenshot from 2024-02-04 10-49-02](https://github.com/infraspecdev/k3s-deployment-configs/assets/156162308/ba01e5fd-ee51-4803-afa6-bf604f41ea56)
+      ![Screenshot from 2024-02-04 10-49-17](https://github.com/infraspecdev/k3s-deployment-configs/assets/156162308/49ccdf35-42d0-46b0-b313-e74bacefed46)
+
+   4. Click “**CHOOSE STORAGE**” and select the SD card you want to use for your Raspberry Pi.
+      ![Screenshot from 2024-02-04 10-56-32](https://github.com/infraspecdev/k3s-deployment-configs/assets/156162308/8c02207b-9575-49f5-9278-5b6779affad7)
+      ![Screenshot from 2024-02-04 10-57-52](https://github.com/infraspecdev/k3s-deployment-configs/assets/156162308/ff78f73b-22eb-445d-9ce5-65eed3a00976)
+
+   5. Click on the gear icon to configure Raspberry Pi. Set up a unique hostname for every Raspberry Pi, activate ssh with password authentication and pass in your ssh credentials. 
+      ![Screenshot from 2024-02-05 08-26-38](https://github.com/infraspecdev/k3s-deployment-configs/assets/156162308/2c0da435-c295-41b7-8105-301e5fdf0848)
+
+   6. Click “**WRITE**” and note that this will clear all the existing data on the SD card. Wait for the image to be written to the SD card.
+      ![Screenshot from 2024-02-05 08-31-38](https://github.com/infraspecdev/k3s-deployment-configs/assets/156162308/32838573-9415-425a-8a12-bb2fcaae690b)
+
+   7. Once the image has been written, eject the SD card and insert it into your Raspberry Pi.
+
+   8. Connect your Raspberry Pi to your router using Ethernet cables, and make sure to attach a power source. Utilize a **NETGEAR POE Switch** for streamlined connectivity. This switch conveniently delivers both electric power and data through the same Ethernet cables, simplifying the setup and enabling simultaneous power delivery to multiple devices. 
+      ![image](https://github.com/infraspecdev/k3s-deployment-configs/assets/156162308/3cf2726f-1e81-4d2f-9c9a-8597d4cab368)
+
+
 
 ## Automating k3s setup: Incoming.... Ansible
 
