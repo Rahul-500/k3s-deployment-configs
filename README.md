@@ -193,46 +193,38 @@ A server node is defined as a Raspberry Pi which runs the k3s server. The worker
 1)Install Docker on the plain node
 
    **`sudo apt-get install ca-certificates curl`**
-
-      -**Description:** In this command ca-certificates provides a set of trusted Certificate Authorities for secure communication, and curl is a versatile command-line tool used for making HTTP requests.
+        -**Description:** In this command ca-certificates provides a set of trusted Certificate Authorities for secure communication, and curl is a versatile command-line tool used for making HTTP requests.
 
    **`sudo install -m 0755 -d /etc/apt/keyrings`**
-
-      -**Description:** This command creates a directory at /etc/apt/keyrings with specific permissions. This directory is intended for storing keyrings used for package verification.
+       -**Description:** This command creates a directory at /etc/apt/keyrings with specific permissions. This directory is intended for storing keyrings used for package verification.
 
    **`sudo curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc`**
-
-      -**Description:** This command uses curl to download the GPG key from the specified Docker repository. The key is saved in the /etc/apt/keyrings/docker.asc file.
+       -**Description:** This command uses curl to download the GPG key from the specified Docker repository. The key is saved in the /etc/apt/keyrings/docker.asc file.
 
    **`sudo chmod a+r /etc/apt/keyrings/docker.asc`**
-
-      -**Description:** This command sets read permissions for all users on the downloaded GPG key file. This ensures that the system can access and verify the integrity of Docker packages using the added key.
+        -**Description:** This command sets read permissions for all users on the downloaded GPG key file. This ensures that the system can access and verify the integrity of Docker packages using the added key.
 
    **`echo \
      "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian \
      $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
      sudo tee /etc/apt/sources.list.d/docker.list > /dev/null`**
-
-      -**Description:** In this command,echo is used to create a new line with the Docker repository configuration. This configuration specifies the Debian architecture, the GPG key location, the Docker repository URL, and the Debian             version codename. This information is then piped into sudo tee /etc/apt/sources.list.d/docker.list, which writes the configuration to the /etc/apt/sources.list.d/docker.list file. The tee command allows writing to a file with               elevated privileges using sudo. The redirection to /dev/null ensures that the command output does not get displayed in the terminal.
-  
+        -**Description:** In this command,echo is used to create a new line with the Docker repository configuration. This configuration specifies the Debian architecture, the GPG key location, the Docker repository URL, and the Debian             version codename. This information is then piped into sudo tee /etc/apt/sources.list.d/docker.list, which writes the configuration to the /etc/apt/sources.list.d/docker.list file. The tee command allows writing to a file with               elevated privileges using sudo. The redirection to /dev/null ensures that the command output does not get displayed in the terminal.
+   
   **`sudo apt-get update`**
-
-      -**Description:** This command is used to refresh the package information from all configured repositories, including the newly added Docker repository.
+        -**Description:** This command is used to refresh the package information from all configured repositories, including the newly added Docker repository.
 
   **`sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin`**
-
-      -**Description:** In this command, apt-get install uses the Advanced Package Tool (APT) to install the specified packages, docker-ce installs the Docker Community Edition (CE), which includes the Docker daemon and client, 
-      docker-ce-cli installs the Docker command-line interface (CLI), allowing users to interact with Docker, containerd.io installs Containerd, an industry-standard core container runtime.
-      docker-buildx-plugin installs the Buildx plugin for Docker, providing additional features for building multi-platform images.
-      docker-compose-plugin installs the Docker Compose CLI plugin, which extends Docker Compose functionality.
+         -**Description:** In this command, apt-get install uses the Advanced Package Tool (APT) to install the specified packages, docker-ce installs the Docker Community Edition (CE), which includes the Docker daemon and client, 
+         docker-ce-cli installs the Docker command-line interface (CLI), allowing users to interact with Docker, containerd.io installs Containerd, an industry-standard core container runtime.
+         docker-buildx-plugin installs the Buildx plugin for Docker, providing additional features for building multi-platform images.
+         docker-compose-plugin installs the Docker Compose CLI plugin, which extends Docker Compose functionality.
 
 2)  Pull the Docker Image of Prometheus from DockerHub
    
    **`sudo docker build -p 9090:9090 prom/prometheus`**
 
    **`sudo docker build -p 9090:9090 prom/prometheus`**
-
-      -**Description:** In this command docker build builds an image. It is followed by the specifications for building the image, including the location of the Dockerfile and the build context, -p 9090:9090 the -p flag specifies the port       mapping, mapping port 9090 on the host machine to port 9090 within the container. This allows access to Prometheus on the host machine via port 9090 and prom/prometheus is the name of the image and the location of the Dockerfile. In        this case, it refers to the official Prometheus image hosted on Docker Hub and docker run is the Docker command for running a container based on a specified image.
+       -**Description:** In this command docker build builds an image. It is followed by the specifications for building the image, including the location of the Dockerfile and the build context, -p 9090:9090 the -p flag specifies the port       mapping, mapping port 9090 on the host machine to port 9090 within the container. This allows access to Prometheus on the host machine via port 9090 and prom/prometheus is the name of the image and the location of the Dockerfile. In        this case, it refers to the official Prometheus image hosted on Docker Hub and docker run is the Docker command for running a container based on a specified image.
    
    
 
