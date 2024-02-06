@@ -217,7 +217,7 @@ A server node is defined as a Raspberry Pi which runs the k3s server. The worker
    
   **`sudo apt-get update`**
   
-   -**Description:** This command is used to refresh the package information from all configured repositories, including the newly added Docker repository.
+   - **Description:** This command is used to refresh the package information from all configured repositories, including the newly added Docker repository.
 
   **`sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin`**
   
@@ -226,7 +226,7 @@ A server node is defined as a Raspberry Pi which runs the k3s server. The worker
     docker-buildx-plugin installs the Buildx plugin for Docker, providing additional features for building multi-platform images.
     docker-compose-plugin installs the Docker Compose CLI plugin, which extends Docker Compose functionality.
 
-2)  Pull the Docker Image of Prometheus from DockerHub
+2)Pull the Docker Image of Prometheus from DockerHub
    
    **`sudo docker build -p 9090:9090 prom/prometheus`**
 
