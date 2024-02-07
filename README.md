@@ -230,7 +230,7 @@ A server node is defined as a Raspberry Pi which runs the k3s server. The worker
    
    **`sudo docker build -p 9090:9090 prom/prometheus`**
 
-   **`sudo docker build -p 9090:9090 prom/prometheus`**
+   **`sudo docker run -p 9090:9090 prom/prometheus`**
    
    - **Description:** In this command docker build builds an image. It is followed by the specifications for building the image, including the location of the Dockerfile and the build context, -p 9090:9090 the -p flag specifies the port       mapping, mapping port 9090 on the host machine to port 9090 within the container. This allows access to Prometheus on the host machine via port 9090 and prom/prometheus is the name of the image and the location of the Dockerfile. In        this case, it refers to the official Prometheus image hosted on Docker Hub and docker run is the Docker command for running a container based on a specified image.
    
