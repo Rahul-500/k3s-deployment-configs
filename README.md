@@ -26,7 +26,7 @@ To use Raspberry Pis as cluster nodes, set them up headless—without a monitor,
 ### Steps:
    1. Download and install the Raspberry Pi Imager on your computer.
       ```bash
-      sudp apt install rpi-imager
+      sudo apt install rpi-imager
       ```
    2. Open the Raspberry Pi Imager and select the “**CHOOSE OS**” option.
       ![Screenshot from 2024-02-04 10-48-25](https://github.com/infraspecdev/k3s-deployment-configs/assets/156162308/2b10f6b5-6a69-43a7-a12f-67648e98f1a0)
