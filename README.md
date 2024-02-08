@@ -176,11 +176,16 @@ A server node is defined as a Raspberry Pi which runs the k3s server. The worker
      Prometheus is an open-source monitoring and alerting toolkit designed for reliability and scalability of applications. It is part of the Cloud Native Computing Foundation (CNCF) and widely used in the field of DevOps and systems monitoring.
      Grafana is an open-source analytics and monitoring platform focused on data visualization and interactive dashboards.It supports for various data sources, plugins, alerting, and customizable dashboards.
 
+### Architecture
+![image](https://github.com/infraspecdev/k3s-deployment-configs/assets/156162703/36f9511b-bf7b-45db-8a02-a58991d40e83)
+
+
 ### Set Up
 - In our project we have used plain node to deploy the Prometheus and Grafana from the DockerHub.
 - By default Prometheus will be exposed on port 9090 and Grafana on port 3000.
   
-1)Install Docker on the plain node
+### 1)Install Docker on the plain node
+
 
    ```bash
    sudo apt-get install ca-certificates curl
@@ -223,13 +228,71 @@ A server node is defined as a Raspberry Pi which runs the k3s server. The worker
     docker-buildx-plugin installs the Buildx plugin for Docker, providing additional features for building multi-platform images.
     docker-compose-plugin installs the Docker Compose CLI plugin, which extends Docker Compose functionality.
 
-2)Pull the Docker Image of Prometheus from DockerHub
+### 2)Pull the Docker Image of Prometheus from DockerHub
   ```bash 
    sudo docker build -p 9090:9090 prom/prometheus
    sudo docker run -p 9090:9090 prom/prometheus
   ```
    - **Description:** In this command docker build builds an image. It is followed by the specifications for building the image, including the location of the Dockerfile and the build context, -p 9090:9090 the -p flag specifies the port       mapping, mapping port 9090 on the host machine to port 9090 within the container. This allows access to Prometheus on the host machine via port 9090 and prom/prometheus is the name of the image and the location of the Dockerfile. In        this case, it refers to the official Prometheus image hosted on Docker Hub and docker run is the Docker command for running a container based on a specified image.
+
+   #### Locate the prometheus.yml file in the directory.
    
+   #### Modify Prometheus’s configuration file to monitor the hosts where you installed node_exporter
+     (By default, Prometheus looks for the file prometheus.yml in the current working directory. This behavior can be changed via the --config.file command line flag. For example, some Prometheus installers use it to set the configuration       file to /etc/prometheus/prometheus.yml.)
+
+   #### The following example shows you the code you should add. Notice that static configs targets are set to ['localhost:9100'] to target node-explorer when running it locally.
+     ` # A scrape configuration containing exactly one endpoint to scrape from node_exporter running on a host:
+        scrape_configs:
+          # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+            -job_name: 'node'
+
+           # metrics_path defaults to '/metrics'
+           # scheme defaults to 'http'.
+
+          static_configs:
+          - targets: ['localhost:9100']
+          
+   #### Start the Prometheus service:
+      ` ./prometheus --config.file=./prometheus.yml
+
+   #### Confirm that Prometheus is running by navigating to http://localhost:9090.
+
+   You can see that the node_exporter metrics have been delivered to Prometheus. Next, the metrics will be sent to Grafana.
+
+### 3)Pull the Docker Image of Grafana from DockerHub
+ ```bash 
+  docker run -d -p 3000:3000 --name=grafana grafana/grafana-enterprise
+  ```
+   - **Description:**  In this command ,--name=grafana assigns the name "grafana" to the container, providing a convenient reference for managing the container in subsequent Docker commands.
+   grafana/grafana-enterprise specifies the Docker image to be used for creating the container. In this case, it's the official Grafana Enterprise image obtained from the Grafana Docker Hub repository.
+
+### 4)Configure Prometheus for Grafana
+
+   When running Prometheus locally, there are two ways to configure Prometheus for Grafana. You can use a hosted Grafana instance at Grafana Cloud or run Grafana locally.
+
+   #### Sign up for https://grafana.com/. Grafana gives you a Prometheus instance out of the box.
+   
+   ![image](https://github.com/infraspecdev/k3s-deployment-configs/assets/156162703/8cc56840-3379-4453-b2c5-bc9493d8e4ba) 
+
+   #### Because we are running our own Prometheus instance locally, we must remote_write our metrics to the Grafana.com Prometheus instance. Grafana provides code to add to your prometheus.yml config file. This includes a remote write              endpoint, our user name and password.
+   
+   #### Add the following code to your prometheus.yml file to begin sending metrics to your hosted Grafana instance.
+        `remote_write:
+         - url: <https://your-remote-write-endpoint>
+           basic_auth:
+             username: <your user name>
+             password: <Your Grafana.com API Key>
+             
+### 5)Check Prometheus metrics in Grafana Explore view
+   In our Grafana instance,we can go to the Explore view and build queries to experiment with the metrics you want to monitor. Here we can also debug issues related to collecting metrics from Prometheus.
+
+### 6)Start building dashboards
+   Now that we have a curated list of queries, create dashboards to render system metrics monitored by Prometheus. When we install Prometheus and node_exporter or windows_exporter, we will find recommended dashboards for use.
+
+   #### The following image shows a dashboard with three panels showing some system metrics:
+   
+   ![image](https://github.com/infraspecdev/k3s-deployment-configs/assets/156162703/cdd245af-0cf3-4598-9e99-5e4783431239)
+
 ### Check for Working
 - [Add your steps for checking the monitoring setup here]
 
