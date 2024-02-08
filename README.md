@@ -1,6 +1,8 @@
 # On-Prime k3s Cluster on Bare Metal Raspberry Pi with Grafana Prometheus Monitoring
 
 Leveraging Raspberry Pi devices, we established a budget-friendly Kubernetes cluster using k3s, a lightweight version designed for edge computing and IoT. This approach allowed us to maximize our existing hardware without the need for additional infrastructure costs.
+
+------------------
 ## Hardware Setup:
 
 ### 1. Raspberry Pi Devices:
@@ -50,22 +52,7 @@ To use Raspberry Pis as cluster nodes, set them up headless—without a monitor,
    8. Connect your Raspberry Pi to your router using Ethernet cables, and make sure to attach a power source. Utilize a **NETGEAR POE Switch** for streamlined connectivity. This switch conveniently delivers both electric power and data through the same Ethernet cables, simplifying the setup and enabling simultaneous power delivery to multiple devices. 
       ![image](https://github.com/infraspecdev/k3s-deployment-configs/assets/156162308/3cf2726f-1e81-4d2f-9c9a-8597d4cab368)
 
-
-
-## Automating k3s setup: Incoming.... Ansible
-
-- **Description:** Introduction to automating k3s setup using Ansible.
-
-### Set Up
-- **On Local Machine:**
-  - Commands and description of each command.
-  
-- **On k3s Setup:**
-  - Commands and description of each command.
-
-### Check for Working
-- [Add your steps for checking the setup here]
-
+------------------------------
 ## Setting up our k3s Cluster
 
 ### Description
@@ -166,7 +153,8 @@ A server node is defined as a Raspberry Pi which runs the k3s server. The worker
 
    - **Description:** Install k3s agent on a worker node by providing the master node's IP address and access token.
    - **Usage:** Execute this command on each worker node to register them with the master node.
-
+  
+--------------------
 ## Application
 
 - **About Docker:** Explanation of Docker and its relevance.
@@ -179,6 +167,8 @@ A server node is defined as a Raspberry Pi which runs the k3s server. The worker
 
 - **Application Structure:**
   - [Describe the structure of your application]
+ 
+-------------------------------------------
 
 ## Prometheus and Grafana (Monitoring)
 
@@ -234,12 +224,25 @@ A server node is defined as a Raspberry Pi which runs the k3s server. The worker
    
    - **Description:** In this command docker build builds an image. It is followed by the specifications for building the image, including the location of the Dockerfile and the build context, -p 9090:9090 the -p flag specifies the port       mapping, mapping port 9090 on the host machine to port 9090 within the container. This allows access to Prometheus on the host machine via port 9090 and prom/prometheus is the name of the image and the location of the Dockerfile. In        this case, it refers to the official Prometheus image hosted on Docker Hub and docker run is the Docker command for running a container based on a specified image.
    
-   
-
-
 ### Check for Working
 - [Add your steps for checking the monitoring setup here]
 
+------------------------------------------------
+## Automating k3s setup: Incoming.... Ansible
+
+- **Description:** Introduction to automating k3s setup using Ansible.
+
+### Set Up
+- **On Local Machine:**
+  - Commands and description of each command.
+  
+- **On k3s Setup:**
+  - Commands and description of each command.
+
+### Check for Working
+- [Add your steps for checking the setup here]
+
+----------------------------------------------
 ## Check for Overall Working of the System
 
 - [Add your steps for checking the overall system functionality]
