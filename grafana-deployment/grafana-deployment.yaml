@@ -51,4 +51,4 @@ spec:
   - name: web
     port: 3000
     targetPort: 3000
-    nodePort: 30105
+    nodePort: 30102
