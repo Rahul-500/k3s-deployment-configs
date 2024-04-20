@@ -44,7 +44,7 @@ spec:
         app: prometheus
     spec:
       nodeSelector:
-        worker-node1: "true"
+        worker-node1: "true"  # Select worker-node1
       containers:
       - name: prometheus
         image: prom/prometheus:v2.49.1
@@ -80,4 +80,4 @@ spec:
   - name: web
     port: 9090
     targetPort: 9090
-    nodePort: 30101
+    nodePort: 30101  
