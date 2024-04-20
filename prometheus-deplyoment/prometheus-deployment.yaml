@@ -43,8 +43,13 @@ spec:
       labels:
         app: prometheus
     spec:
-      nodeSelector:
-        worker-node1: "true"  # Select worker-node1
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: worker-node
+                operator: Exists
       containers:
       - name: prometheus
         image: prom/prometheus:v2.49.1
@@ -73,11 +78,11 @@ kind: Service
 metadata:
   name: prometheus-headless
 spec:
-  type: NodePort
+  type: NodePort  
   selector:
     app: prometheus
   ports:
   - name: web
     port: 9090
     targetPort: 9090
-    nodePort: 30101  
+    nodePort: 30101
