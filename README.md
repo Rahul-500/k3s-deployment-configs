@@ -3,6 +3,7 @@
 Leveraging Raspberry Pi devices, we established a budget-friendly Kubernetes cluster using k3s, a lightweight version designed for edge computing and IoT. This approach allowed us to maximize our existing hardware without the need for additional infrastructure costs.
 
 ------------------
+
 ## Hardware Setup:
 
 ### 1. Raspberry Pi Devices:
@@ -30,293 +31,274 @@ To use Raspberry Pis as cluster nodes, set them up headless—without a monitor,
       ```bash
       sudo apt install rpi-imager
       ```
+
    2. Open the Raspberry Pi Imager and select the “**CHOOSE OS**” option.
-      ![Screenshot from 2024-02-04 10-48-25](https://github.com/infraspecdev/k3s-deployment-configs/assets/156162308/2b10f6b5-6a69-43a7-a12f-67648e98f1a0)
 
-   3. From the list of available operating systems, select “**Raspberry Pi OS (other)**”, and then choose “_Raspberry Pi OS Lite (64-bit)_”
+      ![Screenshot](https://github.com/infraspecdev/k3s-deployment-configs/assets/156162308/2b10f6b5-6a69-43a7-a12f-67648e98f1a0)
 
-      ![Screenshot from 2024-02-04 10-49-02](https://github.com/infraspecdev/k3s-deployment-configs/assets/156162308/ba01e5fd-ee51-4803-afa6-bf604f41ea56)
-      ![Screenshot from 2024-02-04 10-49-17](https://github.com/infraspecdev/k3s-deployment-configs/assets/156162308/49ccdf35-42d0-46b0-b313-e74bacefed46)
+   3. From the list of available operating systems, select “**Raspberry Pi OS (other)**” and choose “_Raspberry Pi OS Lite (64-bit)_”.
+
+      ![Screenshot](https://github.com/infraspecdev/k3s-deployment-configs/assets/156162308/ba01e5fd-ee51-4803-afa6-bf604f41ea56)
+      ![Screenshot](https://github.com/infraspecdev/k3s-deployment-configs/assets/156162308/49ccdf35-42d0-46b0-b313-e74bacefed46)
 
    5. Click “**CHOOSE STORAGE**” and select the SD card you want to use for your Raspberry Pi.
 
-      ![Screenshot from 2024-02-04 10-56-32](https://github.com/infraspecdev/k3s-deployment-configs/assets/156162308/8c02207b-9575-49f5-9278-5b6779affad7)
-      ![Screenshot from 2024-02-04 10-57-52](https://github.com/infraspecdev/k3s-deployment-configs/assets/156162308/ff78f73b-22eb-445d-9ce5-65eed3a00976)
+      ![Screenshot](https://github.com/infraspecdev/k3s-deployment-configs/assets/156162308/8c02207b-9575-49f5-9278-5b6779affad7)
+      ![Screenshot](https://github.com/infraspecdev/k3s-deployment-configs/assets/156162308/ff78f73b-22eb-445d-9ce5-65eed3a00976)
 
-   7. Click on the gear icon to configure Raspberry Pi. Set up a unique hostname for every Raspberry Pi, activate ssh with password authentication and pass in your ssh credentials. 
+   7. Click on the gear icon to configure Raspberry Pi. Set up a unique hostname for every Raspberry Pi, activate SSH with password authentication, and provide your SSH credentials.
 
-      ![Screenshot from 2024-02-05 08-26-38](https://github.com/infraspecdev/k3s-deployment-configs/assets/156162308/2c0da435-c295-41b7-8105-301e5fdf0848)
+      ![Screenshot](https://github.com/infraspecdev/k3s-deployment-configs/assets/156162308/2c0da435-c295-41b7-8105-301e5fdf0848)
 
-   9. Click “**WRITE**” and note that this will clear all the existing data on the SD card. Wait for the image to be written to the SD card.
+   9. Click “**WRITE**” and note that this will clear all existing data on the SD card. Wait for the image to be written to the SD card.
 
-      ![Screenshot from 2024-02-05 08-31-38](https://github.com/infraspecdev/k3s-deployment-configs/assets/156162308/32838573-9415-425a-8a12-bb2fcaae690b)
+      ![Screenshot](https://github.com/infraspecdev/k3s-deployment-configs/assets/156162308/32838573-9415-425a-8a12-bb2fcaae690b)
 
    11. Once the image has been written, eject the SD card and insert it into your Raspberry Pi.
 
-   12. Connect your Raspberry Pi to your router using Ethernet cables, and make sure to attach a power source. Utilize a **NETGEAR POE Switch** for streamlined connectivity. This switch conveniently delivers both electric power and data through the same Ethernet cables, simplifying the setup and enabling simultaneous power delivery to multiple devices. 
+   12. Connect your Raspberry Pi to your router using Ethernet cables, and make sure to attach a power source. Utilize a **NETGEAR POE Switch** for streamlined connectivity. This switch conveniently delivers both electric power and data through the same Ethernet cables, simplifying the setup and enabling simultaneous power delivery to multiple devices.
 
-![image](https://github.com/infraspecdev/k3s-deployment-configs/assets/156162308/3cf2726f-1e81-4d2f-9c9a-8597d4cab368)
+![Image](https://github.com/infraspecdev/k3s-deployment-configs/assets/156162308/3cf2726f-1e81-4d2f-9c9a-8597d4cab368)
 
 ------------------------------
+
 ## Setting up our k3s Cluster
 
 ### Description
 
-We have used the lightweight Kubernetes distribution k3s for our little Raspberry Pi cluster. k3s is a free small size Kubernetes Version optimized for Edge devices and ARM architectures maintained from Rancher.
+We have used the lightweight Kubernetes distribution k3s for our Raspberry Pi cluster. k3s is a free, small-size Kubernetes version optimized for edge devices and ARM architectures and is maintained by Rancher.
 
 ### Architecture
 
-A server node is defined as a Raspberry Pi which runs the k3s server. The worker nodes are defined as Raspberry Pi running the k3s agent. The agents are registered on the server node, and the cluster can be accessed via kubectl and via ssh to the master node.
+A server node is defined as a Raspberry Pi that runs the k3s server. The worker nodes are defined as Raspberry Pis running the k3s agent. The agents register on the server node, and the cluster can be accessed via `kubectl` and via SSH to the master node.
 
 ![k3sArchitecture](https://github.com/infraspecdev/k3s-deployment-configs/assets/156162324/16706066-a672-493c-8d58-95b4fbe62c9e)
 
 ### Set Up
 
-1) **Install k3s server on master node:**
+1. **Install k3s server on master node:**
 
-   - First, ssh into the first Raspberry Pi where you want to install the k3s server using the IP. Authenticated via password. For this project, we have set up the username for the Raspberry Pi with IP 192.168.88.11 as source-node.
+   - SSH into the first Raspberry Pi where you want to install the k3s server using the IP. For this project, we have set up the username for the Raspberry Pi with IP 192.168.88.11 as source-node.
      ```bash
      ssh source-node@192.168.88.11
      ```
 
-   - Second install k3s server with
+   - Install the k3s server:
      ```bash
      curl -sfL https://get.k3s.io | sh -
      ```
 
-   - Typically, the installation now throws a failure message that the cgroup is not correctly set up.
+   - Typically, the installation may throw a failure message that the cgroup is not correctly set up.
      ```
-     [INFO] Failed to find memory cgroup, you may need to add “cgroup_memory=1 cgroup_enable=memory” (/boot/cmdline.txt on a Raspberry Pi)
+     [INFO] Failed to find memory cgroup, you may need to add "cgroup_memory=1 cgroup_enable=memory" to (/boot/cmdline.txt on a Raspberry Pi).
      ```
 
-   - Just do exactly what the message says. Open the file /boot/cmdline.txt and append the mentioned string at the end of the line. It is important that there is no line break added.
+   - Follow the message instructions and edit the `/boot/cmdline.txt` file to add the mentioned string at the end of the line without any line breaks.
      ```bash
      sudo nano /boot/cmdline.txt
      ```
-     and add cgroup_memory=1 cgroup_enable=memory on the end of the first line.
+
+   - Append `cgroup_memory=1 cgroup_enable=memory` to the end of the line.
      
-     - `cgroup_memory=1` : This allows the system to allocate resources (like CPU, memory) to different processes or containers. Enabling memory accounting is crucial for Kubernetes, as it needs to efficiently manage memory resources for applications running in containers.
+     - `cgroup_memory=1`: This allows the system to allocate resources (like CPU, memory) to different processes or containers. Enabling memory accounting is crucial for Kubernetes, as it needs to efficiently manage memory resources for applications running in containers.
      
-     - `cgroup_enable=memory` :  This ensures that memory usage is properly tracked and allocated among different processes or containers, preventing one from using all available memory and affecting the overall system stability.
-     
-   - Exit nano by hitting ctrl+x and y+enter to save the changes and then reboot the system to make the change effective
+     - `cgroup_enable=memory`: This ensures that memory usage is properly tracked and allocated among different processes or containers, preventing one from using all available memory and affecting the overall system stability.
+
+   - Exit nano using `ctrl+x` and save changes by selecting `y` and hitting enter. Reboot the system to apply the changes:
      ```bash
      sudo reboot
      ```
 
-   - Finally, you can ssh back into your master node and check if Kubernetes works and the master node is available.
+   - SSH back into your master node and check if Kubernetes works and the master node is available:
      ```bash
      sudo kubectl get nodes
      ```
-     ![getMasterNodeCommand](https://github.com/infraspecdev/k3s-deployment-configs/assets/156162324/08ebff7f-9644-4b1b-88c5-458e0719d89a)
 
-2) **Install k3s agents on worker nodes:**
+2. **Install k3s agents on worker nodes:**
 
-   - In order to install the k3s agents on the other Raspberries, we need first to get the IP address and the access token from the master node. Ssh into the master node and run the following commands.
+   - To install k3s agents on other Raspberries, get the IP address and access token from the master node. SSH into the master node and run the following commands:
      ```bash
      hostname -I | awk '{print $1}'
      sudo cat /var/lib/rancher/k3s/server/node-token
      ```
 
-   - Copy both and ssh into each worker node and install the k3s agent with the following commands.
+   - Copy both the IP address and the access token, and SSH into each worker node to install the k3s agent:
      ```bash
      curl -sfL https://get.k3s.io | K3S_URL=https://<kmaster_IP_from_above>:6443 K3S_TOKEN=<token_from_above> sh -
      ```
 
-   - If these two environment variables are set, the script directly starts the k3s agent and registers the node on the master. You will get again the cgroup error, and you have to add the two entries 																						again in /boot/cmdline.txt as mentioned in the master node above. After a reboot, you can ssh into your master node and check if the node is registered correctly (can take a couple of minutes). Repeat this step for all nodes you want to add.
+   - If these two environment variables are set, the script directly starts the k3s agent and registers the node on the master. You may encounter the cgroup error again, so add the two entries (`cgroup_memory=1` and `cgroup_enable=memory`) to `/boot/cmdline.txt` as you did for the master node above. After a reboot, SSH into your master node and check if the node is registered correctly (this may take a few minutes). Repeat this step for all nodes you want to add.
 
-   - Finally, for in total 3 nodes, it looks like this
+   - Finally, you should see the list of nodes with the following command:
      ```bash
      sudo kubectl get nodes
      ```
-     ![getNodesCommand](https://github.com/infraspecdev/k3s-deployment-configs/assets/156162324/426056cb-20c7-40ad-8efe-f533baa131d5)
 
 ### Command Descriptions and Usage
 
-1) **`sudo kubectl get nodes`**
-
-   - **Description:** This command is used to check the availability and status of the nodes in the Kubernetes cluster.
+1. **`sudo kubectl get nodes`**
+   - **Description:** This command checks the availability and status of the nodes in the Kubernetes cluster.
    - **Usage:** Execute this command on your master node to ensure that the cluster is set up correctly and all nodes are registered.
-   		Execute this on the master node after installing k3s agents on worker nodes to verify their successful integration into the cluster.
 
-3) **`curl -sfL https://get.k3s.io | sh -`**
-
-   - **Description:** Install k3s server on the master node by fetching the installation script from the provided URL and running it.
+3. **`curl -sfL https://get.k3s.io | sh -`**
+   - **Description:** Installs the k3s server on the master node by fetching the installation script from the provided URL and running it.
    - **Usage:** Execute this command on the master node to set up the k3s server.
 
-4) **`hostname -I | awk '{print $1}'`**
-
-   - **Description:** Retrieve the IP address of the master node.
+4. **`hostname -I | awk '{print $1}'`**
+   - **Description:** Retrieves the IP address of the master node.
    - **Usage:** Execute this command on the master node to get its IP address, which is needed for configuring k3s agents on worker nodes.
 
-5) **`sudo cat /var/lib/rancher/k3s/server/node-token`**
-
-   - **Description:** Display the access token used to register k3s agents on worker nodes.
+5. **`sudo cat /var/lib/rancher/k3s/server/node-token`**
+   - **Description:** Displays the access token used to register k3s agents on worker nodes.
    - **Usage:** Execute this command on the master node to get the access token, which is needed for configuring k3s agents on worker nodes.
 
-6) **`curl -sfL https://get.k3s.io | K3S_URL=https://<kmaster_IP_from_above>:6443 K3S_TOKEN=<token_from_above> sh -`**
-
-   - **Description:** Install k3s agent on a worker node by providing the master node's IP address and access token.
+6. **`curl -sfL https://get.k3s.io | K3S_URL=https://<kmaster_IP_from_above>:6443 K3S_TOKEN=<token_from_above> sh -`**
+   - **Description:** Installs the k3s agent on a worker node by providing the master node's IP address and access token.
    - **Usage:** Execute this command on each worker node to register them with the master node.
-  
+
 --------------------
+
 ## Application
 
-- **About Docker:** Explanation of Docker and its relevance.
+- **About Docker:**
+  Docker is a containerization platform that enables applications to run in isolated environments called containers. Docker containers bundle the application code and dependencies, making them portable and consistent across different environments.
 
 - **Why Use Docker as an Application:**
-  - [Add your reasons here]
+  - Portability: Docker containers can run consistently across different environments, including development, testing, and production.
+  - Isolation: Containers provide process and resource isolation, ensuring applications run independently.
+  - Scalability: Containers can be easily scaled and orchestrated using Kubernetes or k3s.
+  - Ease of Deployment: Docker makes deploying and managing applications straightforward.
 
 - **Setting up Docker on k3s (New Version for Debian):**
-  - Commands and description of each command.
+  - Install Docker on the Raspberry Pi devices using the provided commands, such as `sudo apt-get install docker-ce` and related packages.
 
 - **Application Structure:**
-  - [Describe the structure of your application]
- 
+  - **REST API Endpoints:**
+    - `/user-detail`: Returns user details and increments counters for HTTP requests and 200 responses.
+    - `/bad-request`: Simulates a bad request, returning a 500 error and incrementing the respective counters.
+    - `/random-delay`: Introduces a random delay in the request and returns a success response.
+    - `/metrics`: Exposes Prometheus metrics for monitoring.
+
+- **Prometheus Metrics:**
+    - `total_http_requests`: Counter for total HTTP requests.
+    - `total_200_requests`: Counter for total 200 responses.
+    - `total_500_requests`: Counter for total 500 responses.
+    - `http_request_duration_seconds`: Histogram for HTTP request duration in seconds.
+
 -------------------------------------------
 
 ## Prometheus and Grafana (Monitoring)
 
-   - **Description:**
-     Prometheus is an open-source monitoring and alerting toolkit designed for reliability and scalability of applications. It is part of the Cloud Native Computing Foundation (CNCF) and widely used in the field of DevOps and systems monitoring.
-     Grafana is an open-source analytics and monitoring platform focused on data visualization and interactive dashboards.It supports for various data sources, plugins, alerting, and customizable dashboards.
+- **Description:**
+  Prometheus is an open-source monitoring and alerting toolkit designed for reliability and scalability of applications. It is part of the Cloud Native Computing Foundation (CNCF) and widely used in DevOps and systems monitoring.
+  Grafana is an open-source analytics and monitoring platform focused on data visualization and interactive dashboards. It supports various data sources, plugins, alerting, and customizable dashboards.
 
 ### Architecture
-![image](https://github.com/infraspecdev/k3s-deployment-configs/assets/156162703/36f9511b-bf7b-45db-8a02-a58991d40e83)
-
+![Architecture](https://github.com/infraspecdev/k3s-deployment-configs/assets/156162703/36f9511b-bf7b-45db-8a02-a58991d40e83)
 
 ### Set Up
-- In our project we have used plain node to deploy the Prometheus and Grafana from the DockerHub.
-- By default Prometheus will be exposed on port 9090 and Grafana on port 3000.
-  
-### 1)Install Docker on the plain node
 
+- Deploy Prometheus and Grafana using the YAML configuration files you provided in your repository. By default, Prometheus is exposed on port 9090 and Grafana on port 3000.
 
-   ```bash
-   sudo apt-get install ca-certificates curl
-   ```
-   - **Description:** In this command ca-certificates provides a set of trusted Certificate Authorities for secure communication, and curl is a versatile command-line tool used for making HTTP requests.
+### Install Docker on the Plain Node
 
-   ```bash
-   sudo install -m 0755 -d /etc/apt/keyrings
-   ```
-   - **Description:** This command creates a directory at /etc/apt/keyrings with specific permissions. This directory is intended for storing keyrings used for package verification.
+1. **Install required packages:**
+    ```bash
+    sudo apt-get install ca-certificates curl
+    ```
+    - **Description:** This command installs the necessary packages for secure communication (`ca-certificates`) and making HTTP requests (`curl`).
 
-   ```bash
-   sudo curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
-   ```
-   - **Description:** This command uses curl to download the GPG key from the specified Docker repository. The key is saved in the /etc/apt/keyrings/docker.asc file.
+2. **Create keyrings directory:**
+    ```bash
+    sudo install -m 0755 -d /etc/apt/keyrings
+    ```
+    - **Description:** This command creates the `/etc/apt/keyrings` directory with specific permissions (`0755`) for storing keyrings used for package verification.
 
-   ```bash
-   sudo chmod a+r /etc/apt/keyrings/docker.asc
-   ```
-   - **Description:** This command sets read permissions for all users on the downloaded GPG key file. This ensures that the system can access and verify the integrity of Docker packages using the added key.
+3. **Download Docker GPG key:**
+    ```bash
+    sudo curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
+    ```
+    - **Description:** This command uses `curl` to download the GPG key from the specified Docker repository. The key is saved in the `/etc/apt/keyrings/docker.asc` file.
 
-   ```bash
-   echo \
-     "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian \
-     $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
-     sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-   ```
-   - **Description:** In this command,echo is used to create a new line with the Docker repository configuration. This configuration specifies the Debian architecture, the GPG key location, the Docker repository URL, and the Debian             version codename. This information is then piped into sudo tee /etc/apt/sources.list.d/docker.list, which writes the configuration to the /etc/apt/sources.list.d/docker.list file. The tee command allows writing to a file with               elevated privileges using sudo. The redirection to /dev/null ensures that the command output does not get displayed in the terminal.
-   
-  ```bash
-   sudo apt-get update
-  ```
-   - **Description:** This command is used to refresh the package information from all configured repositories, including the newly added Docker repository.
+4. **Set read permissions on GPG key file:**
+    ```bash
+    sudo chmod a+r /etc/apt/keyrings/docker.asc
+    ```
+    - **Description:** This command sets read permissions for all users on the downloaded GPG key file. This ensures that the system can access and verify the integrity of Docker packages using the added key.
 
-  ```bash
-   sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-  ```
-  - **Description:** In this command, apt-get install uses the Advanced Package Tool (APT) to install the specified packages, docker-ce installs the Docker Community Edition (CE), which includes the Docker daemon and client, 
-    docker-ce-cli installs the Docker command-line interface (CLI), allowing users to interact with Docker, containerd.io installs Containerd, an industry-standard core container runtime.
-    docker-buildx-plugin installs the Buildx plugin for Docker, providing additional features for building multi-platform images.
-    docker-compose-plugin installs the Docker Compose CLI plugin, which extends Docker Compose functionality.
+5. **Add Docker repository to sources list:**
+    ```bash
+    echo \
+      "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian \
+      $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+      sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    ```
+    - **Description:** This command adds a new Docker repository to the sources list. The configuration specifies the Debian architecture, the GPG key location, the Docker repository URL, and the Debian version codename. The command uses `echo` to create a new line with the Docker repository configuration and pipes it to `sudo tee` to write the configuration to the sources list file.
 
-### 2)Pull the Docker Image of Prometheus from DockerHub
-  ```bash 
-   sudo docker build -p 9090:9090 prom/prometheus
-   sudo docker run -p 9090:9090 prom/prometheus
-  ```
-   - **Description:** In this command docker build builds an image. It is followed by the specifications for building the image, including the location of the Dockerfile and the build context, -p 9090:9090 the -p flag specifies the port       mapping, mapping port 9090 on the host machine to port 9090 within the container. This allows access to Prometheus on the host machine via port 9090 and prom/prometheus is the name of the image and the location of the Dockerfile. In        this case, it refers to the official Prometheus image hosted on Docker Hub and docker run is the Docker command for running a container based on a specified image.
+6. **Update package information:**
+    ```bash
+    sudo apt-get update
+    ```
+    - **Description:** This command refreshes the package information from all configured repositories, including the newly added Docker repository.
 
-   #### Locate the prometheus.yml file in the directory.
-   
-   #### Modify Prometheus’s configuration file to monitor the hosts where you installed node_exporter
-     (By default, Prometheus looks for the file prometheus.yml in the current working directory. This behavior can be changed via the --config.file command line flag. For example, some Prometheus installers use it to set the configuration       file to /etc/prometheus/prometheus.yml.)
+7. **Install Docker and related packages:**
+    ```bash
+    sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+    ```
+    - **Description:** This command installs Docker Community Edition (CE), which includes the Docker daemon and client, as well as other Docker-related packages. `docker-ce-cli` installs the Docker command-line interface (CLI), allowing users to interact with Docker. `containerd.io` installs Containerd, an industry-standard core container runtime. `docker-buildx-plugin` installs the Buildx plugin for Docker, providing additional features for building multi-platform images. `docker-compose-plugin` installs the Docker Compose CLI plugin, which extends Docker Compose functionality.
 
-   #### The following example shows you the code you should add. Notice that static configs targets are set to ['localhost:9100'] to target node-explorer when running it locally.
-     ` # A scrape configuration containing exactly one endpoint to scrape from node_exporter running on a host:
-        scrape_configs:
-          # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
-            -job_name: 'node'
+- **Deploying Prometheus:**
+  - Use your YAML configuration file to deploy Prometheus in your k3s cluster.
 
-           # metrics_path defaults to '/metrics'
-           # scheme defaults to 'http'.
+- **Deploying Grafana:**
+  - Similarly, use the provided YAML configuration file to deploy Grafana in your k3s cluster.
 
-          static_configs:
-          - targets: ['localhost:9100']
-          
-   #### Start the Prometheus service:
-      ` ./prometheus --config.file=./prometheus.yml
+### Configure Prometheus for Grafana:
 
-   #### Confirm that Prometheus is running by navigating to http://localhost:9090.
+- **Add Prometheus as a data source in Grafana**: In Grafana, add Prometheus as a data source. You will need the URL where Prometheus is running (`http://localhost:9090` or your IP address).
+- **Create dashboards**: In Grafana, create dashboards using queries to monitor and visualize your application metrics.
 
-   You can see that the node_exporter metrics have been delivered to Prometheus. Next, the metrics will be sent to Grafana.
+### Building Dashboards:
 
-### 3)Pull the Docker Image of Grafana from DockerHub
- ```bash 
-  docker run -d -p 3000:3000 --name=grafana grafana/grafana-enterprise
-  ```
-   - **Description:**  In this command ,--name=grafana assigns the name "grafana" to the container, providing a convenient reference for managing the container in subsequent Docker commands.
-   grafana/grafana-enterprise specifies the Docker image to be used for creating the container. In this case, it's the official Grafana Enterprise image obtained from the Grafana Docker Hub repository.
+- Use the Grafana interface to build custom dashboards based on your application's metrics.
+- Utilize the data visualizations available in Grafana to create informative dashboards that provide insights into your application's performance.
 
-### 4)Configure Prometheus for Grafana
+### Check Prometheus Metrics in Grafana:
 
-   When running Prometheus locally, there are two ways to configure Prometheus for Grafana. You can use a hosted Grafana instance at Grafana Cloud or run Grafana locally.
+- Go to Grafana's Explore view and build queries to experiment with the metrics you want to monitor.
+- Debug any issues related to collecting metrics from Prometheus.
 
-   #### Sign up for https://grafana.com/. Grafana gives you a Prometheus instance out of the box.
-   
-   ![image](https://github.com/infraspecdev/k3s-deployment-configs/assets/156162703/8cc56840-3379-4453-b2c5-bc9493d8e4ba) 
+### Create Dashboards and Panels:
 
-   #### Because we are running our own Prometheus instance locally, we must remote_write our metrics to the Grafana.com Prometheus instance. Grafana provides code to add to your prometheus.yml config file. This includes a remote write              endpoint, our user name and password.
-   
-   #### Add the following code to your prometheus.yml file to begin sending metrics to your hosted Grafana instance.
-        `remote_write:
-         - url: <https://your-remote-write-endpoint>
-           basic_auth:
-             username: <your user name>
-             password: <Your Grafana.com API Key>
-             
-### 5)Check Prometheus metrics in Grafana Explore view
-   In our Grafana instance,we can go to the Explore view and build queries to experiment with the metrics you want to monitor. Here we can also debug issues related to collecting metrics from Prometheus.
+- Once you have built queries in Grafana, create dashboards with panels to visualize metrics monitored by Prometheus.
+- Grafana provides recommended dashboards and panels for use when installing Prometheus and node_exporter.
 
-### 6)Start building dashboards
-   Now that we have a curated list of queries, create dashboards to render system metrics monitored by Prometheus. When we install Prometheus and node_exporter or windows_exporter, we will find recommended dashboards for use.
+![Dashboard](https://github.com/infraspecdev/k3s-deployment-configs/assets/156162703/cdd245af-0cf3-4598-9e99-5e4783431239)
 
-   #### The following image shows a dashboard with three panels showing some system metrics:
-   
-   ![image](https://github.com/infraspecdev/k3s-deployment-configs/assets/156162703/cdd245af-0cf3-4598-9e99-5e4783431239)
+### Check for Working:
 
-### Check for Working
-- [Add your steps for checking the monitoring setup here]
+- Verify the monitoring setup by checking Prometheus metrics in Grafana dashboards.
 
 ------------------------------------------------
+
 ## Automating k3s setup: Incoming.... Ansible
 
 - **Description:** Introduction to automating k3s setup using Ansible.
 
 ### Set Up
+
 - **On Local Machine:**
   - Commands and description of each command.
-  
+
 - **On k3s Setup:**
   - Commands and description of each command.
 
-### Check for Working
-- [Add your steps for checking the setup here]
+### Check for Working:
+
+- [Add your steps for checking the Ansible setup here]
 
 ----------------------------------------------
+
 ## Check for Overall Working of the System
 
-- [Add your steps for checking the overall system functionality]
+- [Add your steps for checking the overall system functionality here]
