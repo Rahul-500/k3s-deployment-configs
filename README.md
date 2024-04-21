@@ -1,6 +1,3 @@
-Here's the revised README file with grammar errors fixed. The changes ensure that the language is consistent and appropriate for describing the project and repository to users:
-
-```markdown
 # On-Prime k3s Cluster on Bare Metal Raspberry Pi with Grafana Prometheus Monitoring
 
 Leveraging Raspberry Pi devices, we established a budget-friendly Kubernetes cluster using k3s, a lightweight version designed for edge computing and IoT. This approach allowed us to maximize our existing hardware without the need for additional infrastructure costs.
@@ -150,8 +147,6 @@ A server node is defined as a Raspberry Pi that runs the k3s server. The worker 
   - Portability: Docker containers can run consistently across different environments, including development, testing, and production.
   - Isolation: Containers provide process and resource isolation, ensuring applications run independently.
   - Scalability: Containers can be easily scaled and orchestrated using Kubernetes or k3s.
-
-
   - Ease of Deployment: Docker makes deploying and managing applications straightforward.
 
 - **Setting up Docker on k3s (New Version for Debian):**
@@ -293,4 +288,3 @@ In the Ansible playbook:
 - The second section installs K3s on worker nodes. The playbook sets the master node's IP address and token as variables (`k3s_url` and `k3s_token`) and then uses them to install K3s on the worker nodes using `curl`.
 
 In this repository, you will find the Ansible playbook script that you can use to automate the setup process.
-```
