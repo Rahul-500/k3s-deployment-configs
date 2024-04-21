@@ -136,6 +136,11 @@ A server node is defined as a Raspberry Pi that runs the k3s server. The worker 
      sudo kubectl get nodes
      ```
 
+3. **Monitor Pods:**
+- You can monitor the running pods using the following command:
+    ```bash
+    kubectl get pods -o wide
+    ```
 ![Screenshot from 2024-04-20 23-22-25](https://github.com/Rahul-500/k3s-deployment-configs/assets/156162324/037a7271-2b06-4a31-9a32-08273d980022)
 
 ### Command Descriptions and Usage
@@ -220,6 +225,12 @@ A server node is defined as a Raspberry Pi that runs the k3s server. The worker 
 - Use the Grafana interface to build custom dashboards based on your application's metrics.
 - Utilize the data visualizations available in Grafana to create informative dashboards that provide insights into your application's performance.
 
+### Prometheus Scraping Targets
+
+Here is a screenshot of the Prometheus UI showing the targets that Prometheus is scraping data from:
+
+![Screenshot from 2024-04-20 23-25-23](https://github.com/Rahul-500/k3s-deployment-configs/assets/156162324/029dc38b-eabc-4e1c-8027-adadccaa8291)
+
 ### Check Prometheus Metrics in Grafana:
 
 - Go to Grafana's Explore view and build queries to experiment with the metrics you want to monitor.
@@ -229,9 +240,11 @@ A server node is defined as a Raspberry Pi that runs the k3s server. The worker 
 
 ![Screenshot from 2024-04-20 23-41-54](https://github.com/Rahul-500/k3s-deployment-configs/assets/156162324/b29a00c6-746f-4802-b095-325c943a7192)
 
-- You can create custom dashboards and panels to visualize the data being collected by Prometheus:
+### Services
 
-![Screenshot from 2024-04-20 23-25-23](https://github.com/Rahul-500/k3s-deployment-configs/assets/156162324/029dc38b-eabc-4e1c-8027-adadccaa8291)
+Here is a screenshot of the output of `kubectl get svc -o wide`:
+
+![Screenshot from 2024-04-20 23-22-53](https://github.com/Rahul-500/k3s-deployment-configs/assets/156162324/fbbe156b-2887-4385-8277-bd8bd9f6b9ad)
 
 ### Check for Working:
 
@@ -267,7 +280,7 @@ A server node is defined as a Raspberry Pi that runs the k3s server. The worker 
     ```bash
     echo \
       "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian \
-      $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+      $(. /etc/os-release and echo "$VERSION_CODENAME") stable" | \
       sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
     ```
     - **Description:** This command adds a new Docker repository to the sources list. The configuration specifies the Debian architecture, the GPG key location, the Docker repository URL, and the Debian version codename. The command uses `echo` to create a new line with the Docker repository configuration and pipes it to `sudo tee` to write the configuration to the sources list file.
@@ -307,15 +320,3 @@ A server node is defined as a Raspberry Pi that runs the k3s server. The worker 
 ## Check for Overall Working of the System
 
 - [Add your steps for checking the overall system functionality here]
-
-### Prometheus Scraping Targets
-
-Here is a screenshot of the Prometheus UI showing the targets that Prometheus is scraping data from:
-
-![Screenshot from 2024-04-20 23-22-53](https://github.com/Rahul-500/k3s-deployment-configs/assets/156162324/fbbe156b-2887-4385-8277-bd8bd9f6b9ad)
-
-### Services
-
-Here is a screenshot of the output of `kubectl get svc -o wide`:
-
-![Screenshot from 2024-04-20 23-22-53](https://github.com/Rahul-500/k3s-deployment-configs/assets/156162324/037a7271-2b06-4a31-9a32-08273d980022)
