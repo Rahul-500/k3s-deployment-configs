@@ -34,31 +34,27 @@ To use Raspberry Pis as cluster nodes, set them up headless—without a monitor,
 
    2. Open the Raspberry Pi Imager and select the “**CHOOSE OS**” option.
 
-      ![Screenshot](https://github.com/infraspecdev/k3s-deployment-configs/assets/156162308/2b10f6b5-6a69-43a7-a12f-67648e98f1a0)
+      ![Screenshot from 2024-04-20 23-22-00](https://github.com/Rahul-500/k3s-deployment-configs/assets/156162324/e1caddc8-0210-45e3-bca7-7cd292b677ee)
 
    3. From the list of available operating systems, select “**Raspberry Pi OS (other)**” and choose “_Raspberry Pi OS Lite (64-bit)_”.
 
-      ![Screenshot](https://github.com/infraspecdev/k3s-deployment-configs/assets/156162308/ba01e5fd-ee51-4803-afa6-bf604f41ea56)
-      ![Screenshot](https://github.com/infraspecdev/k3s-deployment-configs/assets/156162308/49ccdf35-42d0-46b0-b313-e74bacefed46)
+      ![Screenshot from 2024-04-20 23-22-25](https://github.com/Rahul-500/k3s-deployment-configs/assets/156162324/037a7271-2b06-4a31-9a32-08273d980022)
 
    5. Click “**CHOOSE STORAGE**” and select the SD card you want to use for your Raspberry Pi.
 
-      ![Screenshot](https://github.com/infraspecdev/k3s-deployment-configs/assets/156162308/8c02207b-9575-49f5-9278-5b6779affad7)
-      ![Screenshot](https://github.com/infraspecdev/k3s-deployment-configs/assets/156162308/ff78f73b-22eb-445d-9ce5-65eed3a00976)
+      ![Screenshot from 2024-04-20 23-22-53](https://github.com/Rahul-500/k3s-deployment-configs/assets/156162324/fbbe156b-2887-4385-8277-bd8bd9f6b9ad)
+   
+   ![Screenshot from 2024-04-20 23-41-54](https://github.com/Rahul-500/k3s-deployment-configs/assets/156162324/b29a00c6-746f-4802-b095-325c943a7192)
 
-   7. Click on the gear icon to configure Raspberry Pi. Set up a unique hostname for every Raspberry Pi, activate SSH with password authentication, and provide your SSH credentials.
-
-      ![Screenshot](https://github.com/infraspecdev/k3s-deployment-configs/assets/156162308/2c0da435-c295-41b7-8105-301e5fdf0848)
+![Screenshot from 2024-04-20 23-25-23](https://github.com/Rahul-500/k3s-deployment-configs/assets/156162324/029dc38b-eabc-4e1c-8027-adadccaa8291)
 
    9. Click “**WRITE**” and note that this will clear all existing data on the SD card. Wait for the image to be written to the SD card.
 
-      ![Screenshot](https://github.com/infraspecdev/k3s-deployment-configs/assets/156162308/32838573-9415-425a-8a12-bb2fcaae690b)
-
-   11. Once the image has been written, eject the SD card and insert it into your Raspberry Pi.
+![Screenshot from 2024-04-20 23-22-00](https://github.com/Rahul-500/k3s-deployment-configs/assets/156162324/e1caddc8-0210-45e3-bca7-7cd292b677ee)
 
    12. Connect your Raspberry Pi to your router using Ethernet cables, and make sure to attach a power source. Utilize a **NETGEAR POE Switch** for streamlined connectivity. This switch conveniently delivers both electric power and data through the same Ethernet cables, simplifying the setup and enabling simultaneous power delivery to multiple devices.
 
-![Image](https://github.com/infraspecdev/k3s-deployment-configs/assets/156162308/3cf2726f-1e81-4d2f-9c9a-8597d4cab368)
+![Image](https://github.com/Rahul-500/k3s-deployment-configs/assets/156162308/3cf2726f-1e81-4d2f-9c9a-8597d4cab368)
 
 ------------------------------
 
@@ -194,11 +190,43 @@ A server node is defined as a Raspberry Pi that runs the k3s server. The worker 
   Grafana is an open-source analytics and monitoring platform focused on data visualization and interactive dashboards. It supports various data sources, plugins, alerting, and customizable dashboards.
 
 ### Architecture
-![Architecture](https://github.com/infraspecdev/k3s-deployment-configs/assets/156162703/36f9511b-bf7b-45db-8a02-a58991d40e83)
+![Architecture](https://github.com/Rahul-500/k3s-deployment-configs/assets/156162703/36f9511b-bf7b-45db-8a02-a58991d40e83)
 
 ### Set Up
 
 - Deploy Prometheus and Grafana using the YAML configuration files you provided in your repository. By default, Prometheus is exposed on port 9090 and Grafana on port 3000.
+
+- **Deploying Prometheus:**
+  - Use your YAML configuration file to deploy Prometheus in your k3s cluster.
+
+- **Deploying Grafana:**
+  - Similarly, use the provided YAML configuration file to deploy Grafana in your k3s cluster.
+
+### Configure Prometheus for Grafana:
+
+- **Add Prometheus as a data source in Grafana**: In Grafana, add Prometheus as a data source. You will need the URL where Prometheus is running (`http://localhost:9090` or your IP address).
+- **Create dashboards**: In Grafana, create dashboards using queries to monitor and visualize your application metrics.
+
+### Building Dashboards:
+
+- Use the Grafana interface to build custom dashboards based on your application's metrics.
+- Utilize the data visualizations available in Grafana to create informative dashboards that provide insights into your application's performance.
+
+### Check Prometheus Metrics in Grafana:
+
+- Go to Grafana's Explore view and build queries to experiment with the metrics you want to monitor.
+- Debug any issues related to collecting metrics from Prometheus.
+
+### Create Dashboards and Panels:
+
+- Once you have built queries in Grafana, create dashboards with panels to visualize metrics monitored by Prometheus.
+- Grafana provides recommended dashboards and panels for use when installing Prometheus and node_exporter.
+
+![Dashboard](https://github.com/Rahul-500/k3s-deployment-configs/assets/156162703/cdd245af-0cf3-4598-9e99-5e4783431239)
+
+### Check for Working:
+
+- Verify the monitoring setup by checking Prometheus metrics in Grafana dashboards.
 
 ### Install Docker on the Plain Node
 
@@ -246,38 +274,6 @@ A server node is defined as a Raspberry Pi that runs the k3s server. The worker 
     sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
     ```
     - **Description:** This command installs Docker Community Edition (CE), which includes the Docker daemon and client, as well as other Docker-related packages. `docker-ce-cli` installs the Docker command-line interface (CLI), allowing users to interact with Docker. `containerd.io` installs Containerd, an industry-standard core container runtime. `docker-buildx-plugin` installs the Buildx plugin for Docker, providing additional features for building multi-platform images. `docker-compose-plugin` installs the Docker Compose CLI plugin, which extends Docker Compose functionality.
-
-- **Deploying Prometheus:**
-  - Use your YAML configuration file to deploy Prometheus in your k3s cluster.
-
-- **Deploying Grafana:**
-  - Similarly, use the provided YAML configuration file to deploy Grafana in your k3s cluster.
-
-### Configure Prometheus for Grafana:
-
-- **Add Prometheus as a data source in Grafana**: In Grafana, add Prometheus as a data source. You will need the URL where Prometheus is running (`http://localhost:9090` or your IP address).
-- **Create dashboards**: In Grafana, create dashboards using queries to monitor and visualize your application metrics.
-
-### Building Dashboards:
-
-- Use the Grafana interface to build custom dashboards based on your application's metrics.
-- Utilize the data visualizations available in Grafana to create informative dashboards that provide insights into your application's performance.
-
-### Check Prometheus Metrics in Grafana:
-
-- Go to Grafana's Explore view and build queries to experiment with the metrics you want to monitor.
-- Debug any issues related to collecting metrics from Prometheus.
-
-### Create Dashboards and Panels:
-
-- Once you have built queries in Grafana, create dashboards with panels to visualize metrics monitored by Prometheus.
-- Grafana provides recommended dashboards and panels for use when installing Prometheus and node_exporter.
-
-![Dashboard](https://github.com/infraspecdev/k3s-deployment-configs/assets/156162703/cdd245af-0cf3-4598-9e99-5e4783431239)
-
-### Check for Working:
-
-- Verify the monitoring setup by checking Prometheus metrics in Grafana dashboards.
 
 ------------------------------------------------
 
