@@ -136,34 +136,28 @@ A server node is defined as a Raspberry Pi that runs the k3s server. The worker 
      sudo kubectl get nodes
      ```
 
-3. **Monitor Pods:**
-- You can monitor the running pods using the following command:
+### Monitor Pods
+
+- **Deploying Application Pods**: Deploy the application pods using the following command:
+    ```bash
+    kubectl apply -f application-deployment.yaml
+    ```
+
+- Once deployed, you can monitor the running pods using the following command:
     ```bash
     kubectl get pods -o wide
     ```
+
 ![Screenshot from 2024-04-20 23-22-25](https://github.com/Rahul-500/k3s-deployment-configs/assets/156162324/037a7271-2b06-4a31-9a32-08273d980022)
 
-### Command Descriptions and Usage
+### Services
 
-1. **`sudo kubectl get nodes`**
-   - **Description:** This command checks the availability and status of the nodes in the Kubernetes cluster.
-   - **Usage:** Execute this command on your master node to ensure that the cluster is set up correctly and all nodes are registered.
-
-3. **`curl -sfL https://get.k3s.io | sh -`**
-   - **Description:** Installs the k3s server on the master node by fetching the installation script from the provided URL and running it.
-   - **Usage:** Execute this command on the master node to set up the k3s server.
-
-4. **`hostname -I | awk '{print $1}'`**
-   - **Description:** Retrieves the IP address of the master node.
-   - **Usage:** Execute this command on the master node to get its IP address, which is needed for configuring k3s agents on worker nodes.
-
-5. **`sudo cat /var/lib/rancher/k3s/server/node-token`**
-   - **Description:** Displays the access token used to register k3s agents on worker nodes.
-   - **Usage:** Execute this command on the master node to get the access token, which is needed for configuring k3s agents on worker nodes.
-
-6. **`curl -sfL https://get.k3s.io | K3S_URL=https://<kmaster_IP_from_above>:6443 K3S_TOKEN=<token_from_above> sh -`**
-   - **Description:** Installs the k3s agent on a worker node by providing the master node's IP address and access token.
-   - **Usage:** Execute this command on each worker node to register them with the master node.
+- Once you deploy your application and monitoring tools using the provided YAML files, you can monitor the services using the command:
+    ```bash
+    kubectl get svc -o wide
+    ```
+   
+![Screenshot from 2024-04-20 23-22-53](https://github.com/Rahul-500/k3s-deployment-configs/assets/156162324/fbbe156b-2887-4385-8277-bd8bd9f6b9ad)
 
 --------------------
 
@@ -180,75 +174,6 @@ A server node is defined as a Raspberry Pi that runs the k3s server. The worker 
 
 - **Setting up Docker on k3s (New Version for Debian):**
   - Install Docker on the Raspberry Pi devices using the provided commands, such as `sudo apt-get install docker-ce` and related packages.
-
-- **Application Structure:**
-  - **REST API Endpoints:**
-    - `/user-detail`: Returns user details and increments counters for HTTP requests and 200 responses.
-    - `/bad-request`: Simulates a bad request, returning a 500 error and incrementing the respective counters.
-    - `/random-delay`: Introduces a random delay in the request and returns a success response.
-    - `/metrics`: Exposes Prometheus metrics for monitoring.
-
-- **Prometheus Metrics:**
-    - `total_http_requests`: Counter for total HTTP requests.
-    - `total_200_requests`: Counter for total 200 responses.
-    - `total_500_requests`: Counter for total 500 responses.
-    - `http_request_duration_seconds`: Histogram for HTTP request duration in seconds.
-
--------------------------------------------
-
-## Prometheus and Grafana (Monitoring)
-
-- **Description:**
-  Prometheus is an open-source monitoring and alerting toolkit designed for reliability and scalability of applications. It is part of the Cloud Native Computing Foundation (CNCF) and widely used in DevOps and systems monitoring.
-  Grafana is an open-source analytics and monitoring platform focused on data visualization and interactive dashboards. It supports various data sources, plugins, alerting, and customizable dashboards.
-
-### Architecture
-![Architecture](https://github.com/infraspecdev/k3s-deployment-configs/assets/156162703/36f9511b-bf7b-45db-8a02-a58991d40e83)
-
-### Set Up
-
-- Deploy Prometheus and Grafana using the YAML configuration files you provided in your repository. By default, Prometheus is exposed on port 9090 and Grafana on port 3000.
-
-- **Deploying Prometheus:**
-  - Use your YAML configuration file to deploy Prometheus in your k3s cluster.
-
-- **Deploying Grafana:**
-  - Similarly, use the provided YAML configuration file to deploy Grafana in your k3s cluster.
-
-### Configure Prometheus for Grafana:
-
-- **Add Prometheus as a data source in Grafana**: In Grafana, add Prometheus as a data source. You will need the URL where Prometheus is running (`http://localhost:9090` or your IP address).
-- **Create dashboards**: In Grafana, create dashboards using queries to monitor and visualize your application metrics.
-
-### Building Dashboards:
-
-- Use the Grafana interface to build custom dashboards based on your application's metrics.
-- Utilize the data visualizations available in Grafana to create informative dashboards that provide insights into your application's performance.
-
-### Prometheus Scraping Targets
-
-Here is a screenshot of the Prometheus UI showing the targets that Prometheus is scraping data from:
-
-![Screenshot from 2024-04-20 23-25-23](https://github.com/Rahul-500/k3s-deployment-configs/assets/156162324/029dc38b-eabc-4e1c-8027-adadccaa8291)
-
-### Check Prometheus Metrics in Grafana:
-
-- Go to Grafana's Explore view and build queries to experiment with the metrics you want to monitor.
-- Debug any issues related to collecting metrics from Prometheus.
-
-- The image below shows a screenshot of the Grafana UI with a dashboard displaying various metrics and counters from the application:
-
-![Screenshot from 2024-04-20 23-41-54](https://github.com/Rahul-500/k3s-deployment-configs/assets/156162324/b29a00c6-746f-4802-b095-325c943a7192)
-
-### Services
-
-Here is a screenshot of the output of `kubectl get svc -o wide`:
-
-![Screenshot from 2024-04-20 23-22-53](https://github.com/Rahul-500/k3s-deployment-configs/assets/156162324/fbbe156b-2887-4385-8277-bd8bd9f6b9ad)
-
-### Check for Working:
-
-- Verify the monitoring setup by checking Prometheus metrics in Grafana dashboards.
 
 ### Install Docker on the Plain Node
 
@@ -296,6 +221,66 @@ Here is a screenshot of the output of `kubectl get svc -o wide`:
     sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
     ```
     - **Description:** This command installs Docker Community Edition (CE), which includes the Docker daemon and client, as well as other Docker-related packages. `docker-ce-cli` installs the Docker command-line interface (CLI), allowing users to interact with Docker. `containerd.io` installs Containerd, an industry-standard core container runtime. `docker-buildx-plugin` installs the Buildx plugin for Docker, providing additional features for building multi-platform images. `docker-compose-plugin` installs the Docker Compose CLI plugin, which extends Docker Compose functionality.
+
+-------------------------------------------
+
+## Prometheus and Grafana (Monitoring)
+
+- **Description:**
+  Prometheus is an open-source monitoring and alerting toolkit designed for reliability and scalability of applications. It is part of the Cloud Native Computing Foundation (CNCF) and widely used in DevOps and systems monitoring.
+  Grafana is an open-source analytics and monitoring platform focused on data visualization and interactive dashboards. It supports various data sources, plugins, alerting, and customizable dashboards.
+
+### Architecture
+![Architecture](https://github.com/infraspecdev/k3s-deployment-configs/assets/156162703/36f9511b-bf7b-45db-8a02-a58991d40e83)
+
+### Set Up
+
+- Deploy Prometheus and Grafana using the YAML configuration files you provided in your repository. By default, Prometheus is exposed on port 9090 and Grafana on port 3000.
+
+- **Deploying Prometheus:**
+  - Use your YAML configuration file to deploy Prometheus in your k3s cluster.
+
+- **Deploying Grafana:**
+  - Similarly, use the provided YAML configuration file to deploy Grafana in your k3s cluster.
+
+### Prometheus Scraping Targets
+
+Here is a screenshot of the Prometheus UI showing the targets that Prometheus is scraping data from:
+
+![Screenshot from 2024-04-20 23-25-23](https://github.com/Rahul-500/k3s-deployment-configs/assets/156162324/029dc38b-eabc-4e1c-8027-adadccaa8291)
+
+### Check Prometheus Metrics in Grafana:
+
+- Go to Grafana's Explore view and build queries to experiment with the metrics you want to monitor.
+- Debug any issues related to collecting metrics from Prometheus.
+
+- The image below shows a screenshot of the Grafana UI with a dashboard displaying various metrics and counters from the application:
+
+![Screenshot from 2024-04-20 23-41-54](https://github.com/Rahul-500/k3s-deployment-configs/assets/156162324/b29a00c6-746f-4802-b095-325c943a7192)
+
+### Check for Working
+
+- To test if your deployment is running successfully, make sure you have applied the application, Prometheus, and Grafana deployment YAML files as follows:
+
+    ```bash
+    kubectl apply -f application-deployment.yaml
+    kubectl apply -f prometheus-deployment.yaml
+    kubectl apply -f grafana-deployment.yaml
+    ```
+
+- After applying the deployment files, check the status of the running pods:
+    ```bash
+    kubectl get pods -o wide
+    ```
+
+![Screenshot from 2024-04-20 23-22-25](https://github.com/Rahul-500/k3s-deployment-configs/assets/156162324/037a7271-2b06-4a31-9a32-08273d980022)
+
+- To verify the services are running correctly, check the status of the services:
+    ```bash
+    kubectl get svc -o wide
+    ```
+
+![Screenshot from 2024-04-20 23-22-53](https://github.com/Rahul-500/k3s-deployment-configs/assets/156162324/fbbe156b-2887-4385-8277-bd8bd9f6b9ad)
 
 ------------------------------------------------
 
