@@ -1,3 +1,6 @@
+Here's the revised README file with grammar errors fixed. The changes ensure that the language is consistent and appropriate for describing the project and repository to users:
+
+```markdown
 # On-Prime k3s Cluster on Bare Metal Raspberry Pi with Grafana Prometheus Monitoring
 
 Leveraging Raspberry Pi devices, we established a budget-friendly Kubernetes cluster using k3s, a lightweight version designed for edge computing and IoT. This approach allowed us to maximize our existing hardware without the need for additional infrastructure costs.
@@ -20,7 +23,7 @@ Leveraging Raspberry Pi devices, we established a budget-friendly Kubernetes clu
    - Connect Raspberry Pi devices to the router using Ethernet cables.
 
 ### 4. Networking Equipment:
-   - Utilize a __NETGEAR POE Switch__ for efficient power and data distribution through the Ethernet cabling. This simplifies the setup and allows for simultaneous powering of multiple devices.
+   - Utilize a **NETGEAR POE Switch** for efficient power and data distribution through the Ethernet cabling. This simplifies the setup and allows for simultaneous powering of multiple devices.
 
 ## Bake the Pi
 
@@ -114,8 +117,6 @@ A server node is defined as a Raspberry Pi that runs the k3s server. The worker 
      sudo kubectl get nodes
      ```
 
-![Screenshot from 2024-04-20 23-22-00](https://github.com/Rahul-500/k3s-deployment-configs/assets/156162324/e1caddc8-0210-45e3-bca7-7cd292b677ee)
-
 2. **Install k3s agents on worker nodes:**
 
    - To install k3s agents on other Raspberries, get the IP address and access token from the master node. SSH into the master node and run the following commands:
@@ -136,28 +137,7 @@ A server node is defined as a Raspberry Pi that runs the k3s server. The worker 
      sudo kubectl get nodes
      ```
 
-### Monitor Pods
-
-- **Deploying Application Pods**: Deploy the application pods using the following command:
-    ```bash
-    kubectl apply -f application-deployment.yaml
-    ```
-
-- Once deployed, you can monitor the running pods using the following command:
-    ```bash
-    kubectl get pods -o wide
-    ```
-
-![Screenshot from 2024-04-20 23-22-25](https://github.com/Rahul-500/k3s-deployment-configs/assets/156162324/037a7271-2b06-4a31-9a32-08273d980022)
-
-### Services
-
-- Once you deploy your application and monitoring tools using the provided YAML files, you can monitor the services using the command:
-    ```bash
-    kubectl get svc -o wide
-    ```
-   
-![Screenshot from 2024-04-20 23-22-53](https://github.com/Rahul-500/k3s-deployment-configs/assets/156162324/fbbe156b-2887-4385-8277-bd8bd9f6b9ad)
+     ![Screenshot from 2024-04-20 23-22-00](https://github.com/Rahul-500/k3s-deployment-configs/assets/156162324/e1caddc8-0210-45e3-bca7-7cd292b677ee)
 
 --------------------
 
@@ -170,6 +150,8 @@ A server node is defined as a Raspberry Pi that runs the k3s server. The worker 
   - Portability: Docker containers can run consistently across different environments, including development, testing, and production.
   - Isolation: Containers provide process and resource isolation, ensuring applications run independently.
   - Scalability: Containers can be easily scaled and orchestrated using Kubernetes or k3s.
+
+
   - Ease of Deployment: Docker makes deploying and managing applications straightforward.
 
 - **Setting up Docker on k3s (New Version for Debian):**
@@ -222,7 +204,45 @@ A server node is defined as a Raspberry Pi that runs the k3s server. The worker 
     ```
     - **Description:** This command installs Docker Community Edition (CE), which includes the Docker daemon and client, as well as other Docker-related packages. `docker-ce-cli` installs the Docker command-line interface (CLI), allowing users to interact with Docker. `containerd.io` installs Containerd, an industry-standard core container runtime. `docker-buildx-plugin` installs the Buildx plugin for Docker, providing additional features for building multi-platform images. `docker-compose-plugin` installs the Docker Compose CLI plugin, which extends Docker Compose functionality.
 
+- **Application Structure:**
+  - **REST API Endpoints:**
+    - `/user-detail`: Returns user details and increments counters for HTTP requests and 200 responses.
+    - `/bad-request`: Simulates a bad request, returning a 500 error and incrementing the respective counters.
+    - `/random-delay`: Introduces a random delay in the request and returns a success response.
+    - `/metrics`: Exposes Prometheus metrics for monitoring.
+
+  - **Prometheus Metrics:**
+    - `total_http_requests`: Counter for total HTTP requests.
+    - `total_200_requests`: Counter for total 200 responses.
+    - `total_500_requests`: Counter for total 500 responses.
+    - `http_request_duration_seconds`: Histogram for HTTP request duration in seconds.
+
 -------------------------------------------
+
+### Check for Working
+
+- To test if your deployment is running successfully, make sure you have applied the application, Prometheus, and Grafana deployment YAML files as follows:
+
+    ```bash
+    kubectl apply -f application-deployment.yaml
+    kubectl apply -f prometheus-deployment.yaml
+    kubectl apply -f grafana-deployment.yaml
+    ```
+
+- After applying the deployment files, check the status of the running pods:
+    ```bash
+    kubectl get pods -o wide
+    ```
+
+   ![Screenshot from 2024-04-20 23-22-25](https://github.com/Rahul-500/k3s-deployment-configs/assets/156162324/037a7271-2b06-4a31-9a32-08273d980022)
+
+- To verify the services are running correctly, check the status of the services:
+    ```bash
+    kubectl get svc -o wide
+    ```
+
+   ![Screenshot from 2024-04-20 23-22-53](https://github.com/Rahul-500/k3s-deployment-configs/assets/156162324/fbbe156b-2887-4385-8277-bd8bd9f6b9ad)
+
 
 ## Prometheus and Grafana (Monitoring)
 
@@ -235,7 +255,7 @@ A server node is defined as a Raspberry Pi that runs the k3s server. The worker 
 
 ### Set Up
 
-- Deploy Prometheus and Grafana using the YAML configuration files you provided in your repository. By default, Prometheus is exposed on port 9090 and Grafana on port 3000.
+- Deploy Prometheus and Grafana using the YAML configuration files you provided in this repository. By default, Prometheus is exposed on port 9090 and Grafana on port 3000.
 
 - **Deploying Prometheus:**
   - Use your YAML configuration file to deploy Prometheus in your k3s cluster.
@@ -258,50 +278,19 @@ Here is a screenshot of the Prometheus UI showing the targets that Prometheus is
 
 ![Screenshot from 2024-04-20 23-41-54](https://github.com/Rahul-500/k3s-deployment-configs/assets/156162324/b29a00c6-746f-4802-b095-325c943a7192)
 
-### Check for Working
-
-- To test if your deployment is running successfully, make sure you have applied the application, Prometheus, and Grafana deployment YAML files as follows:
-
-    ```bash
-    kubectl apply -f application-deployment.yaml
-    kubectl apply -f prometheus-deployment.yaml
-    kubectl apply -f grafana-deployment.yaml
-    ```
-
-- After applying the deployment files, check the status of the running pods:
-    ```bash
-    kubectl get pods -o wide
-    ```
-
-![Screenshot from 2024-04-20 23-22-25](https://github.com/Rahul-500/k3s-deployment-configs/assets/156162324/037a7271-2b06-4a31-9a32-08273d980022)
-
-- To verify the services are running correctly, check the status of the services:
-    ```bash
-    kubectl get svc -o wide
-    ```
-
-![Screenshot from 2024-04-20 23-22-53](https://github.com/Rahul-500/k3s-deployment-configs/assets/156162324/fbbe156b-2887-4385-8277-bd8bd9f6b9ad)
-
 ------------------------------------------------
 
 ## Automating k3s setup: Incoming.... Ansible
 
-- **Description:** Introduction to automating k3s setup using Ansible.
+You can use the provided Ansible playbook to automate the installation and configuration of K3s on your Raspberry Pi devices.
 
-### Set Up
+In the Ansible playbook:
 
-- **On Local Machine:**
-  - Commands and description of each command.
+- The first section installs K3s on the master node. The `curl` command downloads and runs the K3s installation script with specific options (`--disable traefik,servicelb` and `K3S_KUBECONFIG_MODE="644"`).
 
-- **On k3s Setup:**
-  - Commands and description of each command.
+- After installing K3s on the master node, the playbook retrieves the K3s node token and stores it in the variable `k3s_token`.
 
-### Check for Working:
+- The second section installs K3s on worker nodes. The playbook sets the master node's IP address and token as variables (`k3s_url` and `k3s_token`) and then uses them to install K3s on the worker nodes using `curl`.
 
-- [Add your steps for checking the Ansible setup here]
-
-----------------------------------------------
-
-## Check for Overall Working of the System
-
-- [Add your steps for checking the overall system functionality here]
+In this repository, you will find the Ansible playbook script that you can use to automate the setup process.
+```
